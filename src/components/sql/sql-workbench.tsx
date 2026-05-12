@@ -154,6 +154,7 @@ export function SQLWorkbench() {
   useEffect(() => {
     let cancelled = false;
     let worker: Worker | null = null;
+    let workerUrl: string | null = null;
 
     async function boot() {
       try {
@@ -167,7 +168,7 @@ export function SQLWorkbench() {
         const loadedCatalog = (await catalogResponse.json()) as Catalog;
         const bundles = duckdb.getJsDelivrBundles();
         const bundle = await duckdb.selectBundle(bundles);
-        const workerUrl = URL.createObjectURL(
+        workerUrl = URL.createObjectURL(
           new Blob([`importScripts("${bundle.mainWorker}");`], {
             type: "text/javascript",
           })
@@ -176,7 +177,6 @@ export function SQLWorkbench() {
         worker = new Worker(workerUrl);
         const db = new duckdb.AsyncDuckDB(new duckdb.ConsoleLogger(), worker);
         await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
-        URL.revokeObjectURL(workerUrl);
 
         const conn = await db.connect();
         const baseUrl = loadedCatalog.dataset_base_url || "/data";
@@ -188,12 +188,17 @@ export function SQLWorkbench() {
 
         for (const table of loadedCatalog.tables) {
           const fileName = table.formats.csv;
-          await db.registerFileURL(
-            fileName,
-            `${baseUrl}/${fileName}`,
-            duckdb.DuckDBDataProtocol.HTTP,
-            false
-          );
+          const fileUrl = new URL(
+            `${baseUrl.replace(/\/$/, "")}/${fileName}`,
+            window.location.origin
+          ).toString();
+
+          const csvResponse = await fetch(fileUrl, { cache: "no-store" });
+          if (!csvResponse.ok) {
+            throw new Error(`Could not load ${fileName}`);
+          }
+          await db.registerFileText(fileName, await csvResponse.text());
+
           await conn.query(
             `CREATE OR REPLACE TABLE ${table.name} AS SELECT * FROM read_csv_auto('${fileName}', header=true);`
           );
@@ -230,6 +235,7 @@ export function SQLWorkbench() {
     return () => {
       cancelled = true;
       worker?.terminate();
+      if (workerUrl) URL.revokeObjectURL(workerUrl);
     };
   }, []);
 
