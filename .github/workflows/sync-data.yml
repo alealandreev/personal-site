@@ -1,0 +1,63 @@
+name: Sync public dataset
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * *"
+
+jobs:
+  sync-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Sync API stats
+        run: pnpm sync-data
+        env:
+          GITHUB_TOKEN: ${{ secrets.DATASET_GITHUB_TOKEN || github.token }}
+          GITHUB_USERNAME: ${{ vars.GITHUB_USERNAME || 'alealandreev' }}
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+          LASTFM_USERNAME: ${{ vars.LASTFM_USERNAME || 'alealandreev' }}
+
+      - name: Build public JSON and CSV dataset
+        run: pnpm build-datasets
+        env:
+          NEXT_PUBLIC_DATASET_BASE_URL: ${{ vars.NEXT_PUBLIC_DATASET_BASE_URL || '/data' }}
+
+      - name: Export Parquet files
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install duckdb
+          python scripts/export-parquet.py
+
+      - name: Upload dataset to Cloudflare R2
+        if: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_BUCKET_NAME != '' && secrets.R2_ENDPOINT != '' }}
+        run: |
+          python -m pip install awscli
+          aws s3 sync data/dist "s3://${R2_BUCKET_NAME}" \
+            --endpoint-url "${R2_ENDPOINT}" \
+            --delete \
+            --cache-control "public, max-age=300"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}

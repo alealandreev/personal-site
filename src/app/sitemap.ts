@@ -8,6 +8,7 @@ const SITE_URL =
 const staticPaths = [
   "",
   "/about",
+  "/sql",
   "/writing",
   "/til",
   "/projects",

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageShell, SectionTitle } from "@/components/site/primitives";
-import { isLocale, type Locale } from "@/lib/i18n";
+import { isLocale, localePath, type Locale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/metadata";
 
 type Props = {
@@ -19,6 +20,7 @@ const copy = {
       { label: "Infra", value: "Vercel hosting, Cloudflare DNS, Neon Postgres" },
       { label: "Analytics", value: "@vercel/analytics" },
       { label: "Newsletter", value: "Buttondown" },
+      { label: "Dataset", value: "Public JSON/CSV now, Parquet on Cloudflare R2 next" },
     ],
     notes: [
       "The site is intentionally content-first: essays, notes and case studies matter more than gimmicks.",
@@ -36,6 +38,7 @@ const copy = {
       { label: "Infra", value: "Vercel hosting, Cloudflare DNS, Neon Postgres" },
       { label: "Analytics", value: "@vercel/analytics" },
       { label: "Newsletter", value: "Buttondown" },
+      { label: "Dataset", value: "Public JSON/CSV сейчас, Parquet в Cloudflare R2 следующим шагом" },
     ],
     notes: [
       "Сайт специально делается content-first: статьи, заметки и case studies важнее gimmicks.",
@@ -93,6 +96,9 @@ export default async function ColophonPage({ params }: Props) {
               </li>
             ))}
           </ul>
+          <Link href={localePath(locale, "/sql")} className="button-secondary mt-6">
+            Query the dataset
+          </Link>
         </aside>
       </div>
     </PageShell>

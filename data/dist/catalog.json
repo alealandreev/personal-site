@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "generated_at": "2026-05-12T17:13:56.348Z",
+  "dataset_base_url": "/data",
+  "privacy": "Only public content metadata and aggregated activity metrics are included. Raw personal events and private API payloads are not published.",
+  "tables": [
+    {
+      "name": "posts",
+      "row_count": 2,
+      "formats": {
+        "json": "posts.json",
+        "csv": "posts.csv",
+        "parquet": "posts.parquet"
+      },
+      "columns": [
+        {
+          "name": "slug",
+          "type": "string"
+        },
+        {
+          "name": "locale",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "type": "string"
+        },
+        {
+          "name": "word_count",
+          "type": "number"
+        },
+        {
+          "name": "reading_minutes",
+          "type": "number"
+        },
+        {
+          "name": "featured",
+          "type": "boolean"
+        },
+        {
+          "name": "url",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "projects",
+      "row_count": 2,
+      "formats": {
+        "json": "projects.json",
+        "csv": "projects.csv",
+        "parquet": "projects.parquet"
+      },
+      "columns": [
+        {
+          "name": "slug",
+          "type": "string"
+        },
+        {
+          "name": "locale",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "type": "string"
+        },
+        {
+          "name": "summary",
+          "type": "string"
+        },
+        {
+          "name": "reading_minutes",
+          "type": "number"
+        },
+        {
+          "name": "url",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "til",
+      "row_count": 2,
+      "formats": {
+        "json": "til.json",
+        "csv": "til.csv",
+        "parquet": "til.parquet"
+      },
+      "columns": [
+        {
+          "name": "slug",
+          "type": "string"
+        },
+        {
+          "name": "locale",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "type": "string"
+        },
+        {
+          "name": "summary",
+          "type": "string"
+        },
+        {
+          "name": "reading_minutes",
+          "type": "number"
+        },
+        {
+          "name": "url",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "github_repos",
+      "row_count": 1,
+      "formats": {
+        "json": "github_repos.json",
+        "csv": "github_repos.csv",
+        "parquet": "github_repos.parquet"
+      },
+      "columns": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "language",
+          "type": "string"
+        },
+        {
+          "name": "stars",
+          "type": "number"
+        },
+        {
+          "name": "forks",
+          "type": "number"
+        },
+        {
+          "name": "pushed_at",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "coding_stats",
+      "row_count": 0,
+      "formats": {
+        "json": "coding_stats.json",
+        "csv": "coding_stats.csv",
+        "parquet": "coding_stats.parquet"
+      },
+      "columns": []
+    }
+  ],
+  "sample_queries": [
+    {
+      "id": "content-by-topic",
+      "title": "Which topics appear most often?",
+      "sql": "SELECT tag, COUNT(*) AS mentions\nFROM (\n  SELECT UNNEST(STRING_SPLIT(tags, '|')) AS tag FROM posts\n  UNION ALL\n  SELECT UNNEST(STRING_SPLIT(tags, '|')) AS tag FROM til\n  UNION ALL\n  SELECT UNNEST(STRING_SPLIT(tags, '|')) AS tag FROM projects\n)\nGROUP BY tag\nORDER BY mentions DESC;"
+    },
+    {
+      "id": "writing-density",
+      "title": "How much long-form writing exists?",
+      "sql": "SELECT locale, COUNT(*) AS posts, SUM(word_count) AS words\nFROM posts\nGROUP BY locale\nORDER BY words DESC;"
+    },
+    {
+      "id": "coding-language-mix",
+      "title": "What is the coding language mix?",
+      "sql": "SELECT language, percent, hours_estimate\nFROM coding_stats\nORDER BY percent DESC;"
+    },
+    {
+      "id": "ai-data-projects",
+      "title": "Which projects connect AI tooling and data platforms?",
+      "sql": "SELECT title, status, tags, url\nFROM projects\nWHERE tags LIKE '%llm%' OR tags LIKE '%rag%' OR tags LIKE '%duckdb%'\nORDER BY date DESC;"
+    }
+  ]
+}

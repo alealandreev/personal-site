@@ -1,0 +1,24 @@
+[
+  {
+    "slug": "gitlab-mr-review-agent",
+    "locale": "en",
+    "title": "GitLab MR Review Agent",
+    "date": "2026-03-01",
+    "status": "active",
+    "tags": "llm|rag|fastapi|python|qdrant",
+    "summary": "LLM-powered code review bot using FastAPI, Qdrant, Claude API, and RAG over Confluence. Reduced review turnaround by 40%.",
+    "reading_minutes": 3,
+    "url": "/en/projects/gitlab-mr-review-agent"
+  },
+  {
+    "slug": "gitlab-mr-review-agent",
+    "locale": "ru",
+    "title": "GitLab MR Review Agent",
+    "date": "2026-03-01",
+    "status": "active",
+    "tags": "llm|rag|fastapi|python|qdrant",
+    "summary": "LLM-агент для code review на FastAPI, Qdrant и Claude API с RAG по внутренней документации. Сократил время до review примерно на 40%.",
+    "reading_minutes": 3,
+    "url": "/ru/projects/gitlab-mr-review-agent"
+  }
+]

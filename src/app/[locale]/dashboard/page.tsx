@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageShell, SectionTitle } from "@/components/site/primitives";
 import { getContentStats } from "@/lib/content";
+import { getDatasetCatalog } from "@/lib/dataset-catalog";
 import { isLocale, localePath, type Locale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/metadata";
 
@@ -21,8 +22,11 @@ const copy = {
       projects: "Projects",
     },
     wordsLabel: "words",
+    datasetTablesLabel: "dataset tables",
+    datasetRowsLabel: "public rows",
     writingLink: "Writing",
     projectsLink: "Projects",
+    sqlLink: "Query with SQL",
   },
   ru: {
     title: "Dashboard",
@@ -34,8 +38,11 @@ const copy = {
       projects: "Проекты",
     },
     wordsLabel: "слов",
+    datasetTablesLabel: "таблиц dataset",
+    datasetRowsLabel: "публичных строк",
     writingLink: "Статьи",
     projectsLink: "Проекты",
+    sqlLink: "Открыть SQL",
   },
 } as const satisfies Record<Locale, unknown>;
 
@@ -58,11 +65,14 @@ export default async function DashboardPage({ params }: Props) {
 
   const text = copy[locale];
   const stats = getContentStats(locale);
+  const catalog = getDatasetCatalog();
+  const datasetRows =
+    catalog?.tables.reduce((sum, table) => sum + table.row_count, 0) ?? 0;
 
   return (
     <PageShell>
       <SectionTitle subtitle={text.description}>{text.title}</SectionTitle>
-      <div className="mt-6 grid gap-4 md:grid-cols-4">
+      <div className="mt-6 grid gap-4 md:grid-cols-3 lg:grid-cols-6">
         {[
           { label: text.statsLabels.posts, value: stats.totalPosts },
           { label: text.statsLabels.til, value: stats.totalTils },
@@ -70,6 +80,14 @@ export default async function DashboardPage({ params }: Props) {
           {
             label: text.wordsLabel,
             value: stats.totalWords.toLocaleString(locale),
+          },
+          {
+            label: text.datasetTablesLabel,
+            value: catalog?.tables.length ?? 0,
+          },
+          {
+            label: text.datasetRowsLabel,
+            value: datasetRows.toLocaleString(locale),
           },
         ].map((item) => (
           <div key={item.label} className="surface-card p-5">
@@ -97,6 +115,9 @@ export default async function DashboardPage({ params }: Props) {
             className="button-secondary"
           >
             {text.projectsLink}
+          </Link>
+          <Link href={localePath(locale, "/sql")} className="button-primary">
+            {text.sqlLink}
           </Link>
         </div>
       </div>

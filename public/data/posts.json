@@ -1,0 +1,24 @@
+[
+  {
+    "slug": "hello-world",
+    "locale": "en",
+    "title": "Hello, world",
+    "date": "2026-04-30",
+    "tags": "meta",
+    "word_count": 290,
+    "reading_minutes": 2,
+    "featured": true,
+    "url": "/en/writing/hello-world"
+  },
+  {
+    "slug": "hello-world",
+    "locale": "ru",
+    "title": "Hello, world",
+    "date": "2026-04-30",
+    "tags": "meta",
+    "word_count": 320,
+    "reading_minutes": 2,
+    "featured": true,
+    "url": "/ru/writing/hello-world"
+  }
+]

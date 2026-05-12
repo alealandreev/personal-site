@@ -44,6 +44,28 @@ async function fetchGitHub() {
     repos: user.public_repos ?? 0,
     followers: user.followers ?? 0,
     stars: totalStars,
+    repositories: Array.isArray(repos)
+      ? repos
+          .filter((repo) => !repo.fork)
+          .slice(0, 100)
+          .map(
+            (repo: {
+              name: string;
+              language: string | null;
+              stargazers_count: number;
+              forks_count: number;
+              pushed_at: string | null;
+              html_url: string;
+            }) => ({
+              name: repo.name,
+              language: repo.language,
+              stargazers_count: repo.stargazers_count,
+              forks_count: repo.forks_count,
+              pushed_at: repo.pushed_at,
+              html_url: repo.html_url,
+            })
+          )
+      : [],
     updated_at: new Date().toISOString(),
   };
 }

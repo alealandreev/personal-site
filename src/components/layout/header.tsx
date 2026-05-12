@@ -8,6 +8,7 @@ import { localePath, type Locale } from "@/lib/i18n";
 
 const navByLocale = {
   en: [
+    { href: "/sql", label: "SQL" },
     { href: "/writing", label: "Writing" },
     { href: "/til", label: "TIL" },
     { href: "/projects", label: "Projects" },
@@ -15,6 +16,7 @@ const navByLocale = {
     { href: "/cv", label: "CV" },
   ],
   ru: [
+    { href: "/sql", label: "SQL" },
     { href: "/writing", label: "Статьи" },
     { href: "/til", label: "TIL" },
     { href: "/projects", label: "Проекты" },

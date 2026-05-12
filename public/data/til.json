@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "duckdb-httpfs-pushdown",
+    "locale": "en",
+    "title": "DuckDB httpfs column pushdown over Parquet on S3",
+    "date": "2026-04-29",
+    "tags": "duckdb|parquet|s3",
+    "summary": "DuckDB pushes column projection and filter predicates down to S3 Parquet reads — but only if your file stats are valid.",
+    "reading_minutes": 1,
+    "url": "/en/til/duckdb-httpfs-pushdown"
+  },
+  {
+    "slug": "duckdb-httpfs-pushdown",
+    "locale": "ru",
+    "title": "DuckDB httpfs pushdown для Parquet в S3",
+    "date": "2026-04-29",
+    "tags": "duckdb|parquet|s3",
+    "summary": "DuckDB умеет проталкивать проекции колонок и фильтры прямо в чтение Parquet из S3 — но только если статистика файла действительно записана.",
+    "reading_minutes": 2,
+    "url": "/ru/til/duckdb-httpfs-pushdown"
+  }
+]

@@ -4,6 +4,7 @@ import { localePath, type Locale } from "@/lib/i18n";
 const linksByLocale = {
   en: [
     { href: "/rss.xml", label: "RSS" },
+    { href: "/sql", label: "SQL" },
     { href: "/dashboard", label: "Dashboard" },
     { href: "/now", label: "Now" },
     { href: "/uses", label: "Uses" },
@@ -12,6 +13,7 @@ const linksByLocale = {
   ],
   ru: [
     { href: "/rss.xml", label: "RSS" },
+    { href: "/sql", label: "SQL" },
     { href: "/dashboard", label: "Dashboard" },
     { href: "/now", label: "Сейчас" },
     { href: "/uses", label: "Инструменты" },

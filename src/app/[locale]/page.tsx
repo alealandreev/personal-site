@@ -32,7 +32,7 @@ const copy = {
       "This site is evolving into a small engineering artifact: essays, TIL notes, project write-ups and interactive explanations about streaming, lakehouse systems and applied AI tooling.",
     availability:
       "Based in Moscow. Open to senior+ remote or relocation roles across AU/NZ/EU/US.",
-    primaryCta: "Start with the project",
+    primaryCta: "Query the dataset",
     secondaryCta: "View CV",
     featuredWriting: "Writing with implementation detail",
     latestTils: "Field notes",
@@ -63,6 +63,11 @@ const copy = {
     startHereTitle: "Start here",
     startHere: [
       {
+        title: "SQL",
+        href: "/sql",
+        text: "A live DuckDB workbench over public portfolio data.",
+      },
+      {
         title: "Writing",
         href: "/writing",
         text: "Long-form essays with explicit implementation detail.",
@@ -71,11 +76,6 @@ const copy = {
         title: "Projects",
         href: "/projects",
         text: "Case studies and systems that show applied judgement.",
-      },
-      {
-        title: "TIL",
-        href: "/til",
-        text: "Short notes from daily work with data systems.",
       },
     ],
     stats: [
@@ -113,7 +113,7 @@ const copy = {
       "Этот сайт развивается как небольшой инженерный артефакт: статьи, TIL-заметки, разборы проектов и интерактивные объяснения про streaming, lakehouse и applied AI tooling.",
     availability:
       "Живу в Москве. Открыт к senior+ remote и relocation ролям в AU/NZ/EU/US.",
-    primaryCta: "Начать с проекта",
+    primaryCta: "Запросить dataset",
     secondaryCta: "Открыть CV",
     featuredWriting: "Статьи с деталями реализации",
     latestTils: "Полевые заметки",
@@ -144,6 +144,11 @@ const copy = {
     startHereTitle: "Куда смотреть",
     startHere: [
       {
+        title: "SQL",
+        href: "/sql",
+        text: "Живой DuckDB-workbench по публичным данным портфолио.",
+      },
+      {
         title: "Статьи",
         href: "/writing",
         text: "Длинные тексты с практическими деталями реализации.",
@@ -152,11 +157,6 @@ const copy = {
         title: "Проекты",
         href: "/projects",
         text: "Разборы систем и решений, где виден инженерный judgement.",
-      },
-      {
-        title: "TIL",
-        href: "/til",
-        text: "Короткие заметки из ежедневной работы с data systems.",
       },
     ],
     stats: [
@@ -229,7 +229,7 @@ export default async function HomePage({ params }: Props) {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                href={localePath(locale, "/projects/gitlab-mr-review-agent")}
+                href={localePath(locale, "/sql")}
                 className="button-primary"
               >
                 {text.primaryCta}

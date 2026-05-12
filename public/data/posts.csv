@@ -1,0 +1,3 @@
+slug,locale,title,date,tags,word_count,reading_minutes,featured,url
+hello-world,en,"Hello, world",2026-04-30,meta,290,2,true,/en/writing/hello-world
+hello-world,ru,"Hello, world",2026-04-30,meta,320,2,true,/ru/writing/hello-world
