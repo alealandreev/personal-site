@@ -1,0 +1,101 @@
+---
+title: "GitLab MR Review Agent"
+date: "2026-03-01"
+summary: "LLM-powered code review bot using FastAPI, Qdrant, Claude API, and RAG over Confluence. Reduced review turnaround by 40%."
+tags: ["llm", "rag", "fastapi", "python", "qdrant"]
+status: "active"
+featured: true
+---
+
+## Problem context
+
+At AlfaStrakhovanie, our data engineering team processes 50+ merge requests per week across Spark jobs, dbt models, and Airflow DAGs. Senior engineers were spending 4–6 hours/week on reviews that were repetitive: checking naming conventions, validating SQL query patterns, verifying that new models referenced the correct data contracts.
+
+The goal: automate the repetitive 60% of review feedback so senior engineers can focus on architecture and logic.
+
+## Architecture
+
+```
+GitLab Webhook (MR event)
+        │
+        ▼
+FastAPI service (webhook handler)
+        │
+        ├── fetch MR diff via GitLab API
+        ├── chunk diff by file/hunk
+        │
+        ▼
+Qdrant retrieval (RAG)
+        │
+        ├── query: Confluence data contracts
+        ├── query: internal coding standards docs
+        ├── query: similar past MR reviews
+        │
+        ▼
+Claude API (claude-3-5-sonnet)
+        │
+        ├── system prompt: role + company context
+        ├── retrieved context (top-k chunks)
+        ├── MR diff
+        │
+        ▼
+Structured JSON output (per-file comments)
+        │
+        ▼
+GitLab API → post inline comments on MR
+```
+
+## Trade-offs explored
+
+**RAG vs. fine-tuning:** Fine-tuning was ruled out — our codebase evolves faster than any fine-tuning cycle. RAG over live Confluence gives current context without retraining.
+
+**Claude vs. GPT-4o:** Tested both. Claude produced more actionable feedback with fewer false positives on Spark job patterns. Lower hallucination rate on domain-specific SQL.
+
+**Chunk size for diffs:** Hunks of ~150 lines performed better than full files. Large diffs (500+ lines) caused context dilution and worse recall.
+
+## Implementation highlights
+
+```python
+# Simplified retrieval step
+async def retrieve_context(diff_chunk: str, k: int = 8) -> list[str]:
+    embedding = await embed(diff_chunk)
+
+    results = await qdrant_client.search(
+        collection_name="internal_docs",
+        query_vector=embedding,
+        limit=k,
+        with_payload=True,
+    )
+
+    return [hit.payload["text"] for hit in results]
+```
+
+```python
+# Review generation
+async def generate_review(diff: str, context: list[str]) -> ReviewOutput:
+    response = await anthropic.messages.create(
+        model="claude-3-5-sonnet-20241022",
+        max_tokens=2048,
+        system=REVIEW_SYSTEM_PROMPT,
+        messages=[
+            {
+                "role": "user",
+                "content": f"<context>\n{chr(10).join(context)}\n</context>\n\n<diff>\n{diff}\n</diff>",
+            }
+        ],
+    )
+    return parse_review(response.content[0].text)
+```
+
+## Results
+
+- **Review turnaround:** reduced from avg. 18h → 11h (−40%)
+- **False positive rate:** ~8% (manually validated over 200 reviews)
+- **Adoption:** 3 teams actively using it; 2 more onboarding
+- **Cost:** ~$0.04 per MR review (Claude API). Pays back in minutes of senior engineer time saved.
+
+## What I'd do differently
+
+1. **Chunk by semantic boundary, not line count.** Splitting mid-function degraded context quality. A tree-sitter parser for Python/SQL would be better.
+2. **Add confidence scores.** Some comments are high-confidence (naming violations), others speculative (performance concerns). Surface that to reviewers.
+3. **Human-in-the-loop for critical paths.** Production pipeline MRs should require explicit human sign-off even if the agent approves.

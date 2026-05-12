@@ -1,0 +1,41 @@
+---
+title: "DuckDB httpfs column pushdown over Parquet on S3"
+date: "2026-04-29"
+tags: ["duckdb", "parquet", "s3"]
+summary: "DuckDB pushes column projection and filter predicates down to S3 Parquet reads — but only if your file stats are valid."
+---
+
+When querying a Parquet file on S3 with `httpfs`, DuckDB pushes column projections and row group filters down to the HTTP range requests — meaning it only fetches the bytes it needs.
+
+```sql
+INSTALL httpfs;
+LOAD httpfs;
+
+SET s3_region = 'eu-west-1';
+
+-- Only fetches the 'ts' and 'value' columns from each row group
+-- Row groups where ts < '2026-01-01' are skipped entirely (if stats valid)
+SELECT ts, value
+FROM read_parquet('s3://my-bucket/events/*.parquet')
+WHERE ts >= '2026-01-01'
+  AND value > 100
+LIMIT 1000;
+```
+
+**The catch:** pushdown only works if:
+1. **Column statistics are present** in the Parquet footer (written by Spark/pandas with `write_statistics=True`)
+2. **Row group size is reasonable** — very large row groups (512MB+) reduce pushdown effectiveness
+3. **The predicate column has high selectivity**
+
+Check your file's statistics:
+
+```python
+import pyarrow.parquet as pq
+
+pf = pq.ParquetFile("events.parquet")
+print(pf.metadata.row_group(0).column(0).statistics)
+# => <pyarrow._parquet.Statistics object>
+#    has_min_max: True, min: 2026-01-01, max: 2026-01-31
+```
+
+If `has_min_max` is `False` — you're doing a full scan regardless of your WHERE clause.

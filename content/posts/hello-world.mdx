@@ -1,0 +1,62 @@
+---
+title: "Hello, world"
+date: "2026-04-30"
+summary: "First post on the new site — stack overview and what's coming."
+tags: ["meta"]
+status: "published"
+---
+
+This is the first post on the new site.
+
+After years of meaning to start a proper engineering blog, this is me actually doing it.
+
+## Who this is for
+
+Senior+ data engineers who've been around long enough to be skeptical of hype.
+People who appreciate honest trade-off analysis over vendor-sponsored "best practices."
+
+## The stack
+
+- **Next.js 15** — App Router, React Server Components
+- **MDX** via `fumadocs-mdx` — posts live in `content/` as `.mdx` files
+- **Tailwind CSS v4** — no config file, CSS-native tokens
+- **Syntax highlighting** via `rehype-pretty-code` + Shiki
+
+```python
+# Obligatory first-post hello world
+def main():
+    print("persistentengineer.com is live")
+
+if __name__ == "__main__":
+    main()
+```
+
+Infrastructure: Cloudflare (DNS, CDN, Email), Vercel (hosting), Neon (Postgres for view counters).
+
+```sql
+-- View counter — every post gets one
+CREATE TABLE views (
+    id      SERIAL PRIMARY KEY,
+    slug    TEXT NOT NULL,
+    ts      TIMESTAMPTZ DEFAULT now(),
+    ip_hash TEXT  -- hashed, not stored raw
+);
+```
+
+## What's coming
+
+**Essays** on topics I've been thinking about:
+
+- Why your dbt project will become unmaintainable (and what to do)
+- Apache Iceberg snapshot isolation — a practical deep-dive
+- Streaming is mostly batch in disguise
+
+**TIL** — short notes on things I discover during daily work.
+
+**Projects** — case studies on real systems, including an LLM-based MR review agent built with FastAPI, Qdrant, and Claude API.
+
+Subscribe to the RSS feed: [/rss.xml](/rss.xml)
+
+---
+
+*Open to senior+ Data Engineering roles in AU/NZ/EU/US — [get in touch](/about).*
