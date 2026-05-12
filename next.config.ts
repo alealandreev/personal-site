@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      { source: "/cv/download", destination: "/cv.pdf", permanent: false },
+      { source: "/cv/download", destination: "/en/cv", permanent: false },
     ];
   },
 };

@@ -1,6 +1,5 @@
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
-import Image from "next/image";
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -27,18 +26,11 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
         <img
           src={src}
           alt={alt || ""}
-          className="rounded-md border"
-          style={{ borderColor: "var(--border)", width: "100%" }}
+          className="w-full rounded-3xl border border-[--border]"
           {...props}
         />
         {alt && (
-          <figcaption
-            style={{
-              color: "var(--fg-muted)",
-              fontFamily: "var(--font-mono)",
-            }}
-            className="mt-2 text-center text-xs"
-          >
+          <figcaption className="mt-2 text-center font-mono text-xs text-[--fg-muted]">
             {alt}
           </figcaption>
         )}
@@ -47,15 +39,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 
     // Callout / blockquote
     blockquote: ({ children }) => (
-      <blockquote
-        style={{
-          borderLeft: "3px solid var(--accent)",
-          paddingLeft: "1rem",
-          color: "var(--fg-muted)",
-          fontStyle: "italic",
-          margin: "1.5rem 0",
-        }}
-      >
+      <blockquote className="my-6 border-l-[3px] border-[--accent] pl-4 italic text-[--fg-muted]">
         {children}
       </blockquote>
     ),

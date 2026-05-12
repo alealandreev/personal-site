@@ -1,20 +1,21 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   if (!mounted) {
     return (
       <button
         aria-label="Toggle theme"
-        className="h-8 w-8 rounded-md"
-        style={{ color: "var(--fg-muted)" }}
+        className="h-9 w-9 rounded-full border border-[--border]"
       />
     );
   }
@@ -23,14 +24,7 @@ export function ThemeToggle() {
     <button
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
-      style={{
-        color: "var(--fg-muted)",
-        fontFamily: "var(--font-mono)",
-        border: "1px solid var(--border)",
-        background: "transparent",
-        borderRadius: "4px",
-      }}
-      className="flex h-7 w-7 items-center justify-center text-xs transition-colors hover:text-[--accent]"
+      className="flex h-9 w-9 items-center justify-center rounded-full border border-[--border] bg-[--surface] font-mono text-xs text-[--fg-muted] transition-colors hover:text-[--accent]"
     >
       {resolvedTheme === "dark" ? "☀" : "◑"}
     </button>

@@ -1,2 +1,6 @@
 .env.local
 .env.example
+docs
+node_modules
+.next
+.source

@@ -1,0 +1,54 @@
+Это первый пост на новом сайте.
+
+После нескольких лет в режиме "надо бы уже завести нормальный инженерный блог" я наконец-то действительно это делаю.
+
+## Для кого этот сайт
+
+Для senior+ data engineers, которые уже слишком давно в индустрии, чтобы верить хайпу на слово.
+Для тех, кто ценит честный разбор trade-off'ов сильнее, чем очередные vendor-sponsored "best practices".
+
+## На чём всё собрано
+
+- **Next.js 16** — App Router и React Server Components
+- **MDX** через `fumadocs-mdx` — посты живут в `content/` как `.mdx`-файлы
+- **Tailwind CSS v4** — без отдельного конфига, дизайн-токены в CSS
+- **Подсветка кода** через `rehype-pretty-code` + Shiki
+
+```python
+# Обязательный hello world для первого поста
+def main():
+    print("persistentengineer.com is live")
+
+if __name__ == "__main__":
+    main()
+```
+
+Инфраструктура: Cloudflare (DNS, CDN, Email), Vercel (hosting), Neon (Postgres для счётчиков просмотров).
+
+```sql
+-- Счётчик просмотров: у каждого поста свой
+CREATE TABLE views (
+    id      SERIAL PRIMARY KEY,
+    slug    TEXT NOT NULL,
+    ts      TIMESTAMPTZ DEFAULT now(),
+    ip_hash TEXT  -- хэш, а не raw IP
+);
+```
+
+## Что дальше
+
+**Большие статьи** по темам, о которых я давно думаю:
+
+- Почему ваш dbt-проект почти наверняка станет неуправляемым
+- Apache Iceberg snapshot isolation без магии и маркетинга
+- Почему streaming чаще всего оказывается batch в другом костюме
+
+**TIL** — короткие заметки о вещах, которые я и сам гуглю повторно.
+
+**Projects** — разборы реальных систем, включая LLM-based MR review agent на FastAPI, Qdrant и Claude API.
+
+Подписаться можно через RSS: [/ru/rss.xml](/ru/rss.xml)
+
+---
+
+*Открыт к senior+ Data Engineering ролям в AU/NZ/EU/US — [связаться](/ru/about).*

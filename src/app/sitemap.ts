@@ -1,34 +1,85 @@
 import type { MetadataRoute } from "next";
+import { getAllTags, getEntries } from "@/lib/content";
+import { localePath, locales } from "@/lib/i18n";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://persistentengineer.com";
 
-const POST_SLUGS = ["hello-world"];
-const TIL_SLUGS = ["duckdb-httpfs-pushdown"];
+const staticPaths = [
+  "",
+  "/about",
+  "/writing",
+  "/til",
+  "/projects",
+  "/tags",
+  "/now",
+  "/uses",
+  "/cv",
+  "/colophon",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes: MetadataRoute.Sitemap = [
-    { url: SITE_URL, priority: 1.0, changeFrequency: "monthly" },
-    { url: `${SITE_URL}/about`, priority: 0.8, changeFrequency: "monthly" },
-    { url: `${SITE_URL}/writing`, priority: 0.9, changeFrequency: "weekly" },
-    { url: `${SITE_URL}/til`, priority: 0.8, changeFrequency: "weekly" },
-    { url: `${SITE_URL}/projects`, priority: 0.8, changeFrequency: "monthly" },
-    { url: `${SITE_URL}/now`, priority: 0.6, changeFrequency: "monthly" },
-    { url: `${SITE_URL}/uses`, priority: 0.5, changeFrequency: "yearly" },
-    { url: `${SITE_URL}/cv`, priority: 0.7, changeFrequency: "monthly" },
-    { url: `${SITE_URL}/dashboard`, priority: 0.4, changeFrequency: "daily" },
-  ];
+  const staticRoutes: MetadataRoute.Sitemap = locales.flatMap((locale) =>
+    staticPaths.map((path) => ({
+      url: `${SITE_URL}${localePath(locale, path || "/")}`,
+      priority: path === "" ? 1.0 : 0.7,
+      changeFrequency: path === "/writing" || path === "/til" ? "weekly" : "monthly",
+      alternates: {
+        languages: Object.fromEntries(
+          locales.map((candidate) => [
+            candidate,
+            `${SITE_URL}${localePath(candidate, path || "/")}`,
+          ])
+        ),
+      },
+    }))
+  );
 
-  const postRoutes: MetadataRoute.Sitemap = POST_SLUGS.map((slug) => ({
-    url: `${SITE_URL}/writing/${slug}`,
-    priority: 0.7,
-    changeFrequency: "monthly",
-  }));
+  const contentRoutes: MetadataRoute.Sitemap = locales.flatMap((locale) =>
+    getEntries(locale).map((entry) => ({
+      url: `${SITE_URL}${localePath(
+        locale,
+        entry.kind === "post"
+          ? `/writing/${entry.slug}`
+          : entry.kind === "til"
+            ? `/til/${entry.slug}`
+            : `/projects/${entry.slug}`
+      )}`,
+      lastModified: entry.date,
+      priority: entry.kind === "post" ? 0.8 : 0.6,
+      changeFrequency: entry.kind === "post" ? "monthly" : "yearly",
+      alternates: {
+        languages: Object.fromEntries(
+          locales.map((candidate) => [
+            candidate,
+            `${SITE_URL}${localePath(
+              candidate,
+              entry.kind === "post"
+                ? `/writing/${entry.slug}`
+                : entry.kind === "til"
+                  ? `/til/${entry.slug}`
+                  : `/projects/${entry.slug}`
+            )}`,
+          ])
+        ),
+      },
+    }))
+  );
 
-  const tilRoutes: MetadataRoute.Sitemap = TIL_SLUGS.map((slug) => ({
-    url: `${SITE_URL}/til/${slug}`,
-    priority: 0.5,
-    changeFrequency: "never",
-  }));
+  const tagRoutes: MetadataRoute.Sitemap = locales.flatMap((locale) =>
+    getAllTags(locale).map((item) => ({
+      url: `${SITE_URL}${localePath(locale, `/tags/${item.tag}`)}`,
+      priority: 0.5,
+      changeFrequency: "monthly",
+      alternates: {
+        languages: Object.fromEntries(
+          locales.map((candidate) => [
+            candidate,
+            `${SITE_URL}${localePath(candidate, `/tags/${item.tag}`)}`,
+          ])
+        ),
+      },
+    }))
+  );
 
-  return [...staticRoutes, ...postRoutes, ...tilRoutes];
+  return [...staticRoutes, ...contentRoutes, ...tagRoutes];
 }

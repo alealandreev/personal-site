@@ -1,0 +1,90 @@
+## Контекст задачи
+
+В AlfaStrakhovanie команда data engineering обрабатывает 50+ merge request'ов в неделю по Spark job'ам, dbt-моделям и Airflow DAG'ам. Старшие инженеры тратили 4-6 часов в неделю на повторяющиеся замечания: проверить naming, посмотреть SQL-паттерны, убедиться, что новые модели опираются на правильные data contracts.
+
+Цель была простой: автоматизировать рутинные 60% review-фидбэка, чтобы люди тратили время на архитектуру и логику, а не на однотипные проверки.
+
+## Архитектура
+
+```
+GitLab Webhook (MR event)
+        │
+        ▼
+FastAPI service (webhook handler)
+        │
+        ├── fetch MR diff via GitLab API
+        ├── chunk diff by file/hunk
+        │
+        ▼
+Qdrant retrieval (RAG)
+        │
+        ├── query: Confluence data contracts
+        ├── query: internal coding standards docs
+        ├── query: similar past MR reviews
+        │
+        ▼
+Claude API
+        │
+        ├── system prompt: role + company context
+        ├── retrieved context (top-k chunks)
+        ├── MR diff
+        │
+        ▼
+Structured JSON output (per-file comments)
+        │
+        ▼
+GitLab API → post inline comments on MR
+```
+
+## Что пришлось взвешивать
+
+**RAG против fine-tuning.** Fine-tuning быстро отпал: кодовая база и внутренние правила меняются быстрее, чем любой цикл переобучения. RAG по актуальным документам из Confluence давал живой контекст без retraining.
+
+**Claude против GPT-4o.** Оба варианта тестировались. Claude давал более прикладной и аккуратный review на Spark/SQL-паттернах и реже шумел ложными замечаниями.
+
+**Размер chunk'ов diff.** Оптимум оказался около 150 строк. Полные файлы ухудшали recall и размывали контекст.
+
+## Ключевой фрагмент реализации
+
+```python
+async def retrieve_context(diff_chunk: str, k: int = 8) -> list[str]:
+    embedding = await embed(diff_chunk)
+
+    results = await qdrant_client.search(
+        collection_name="internal_docs",
+        query_vector=embedding,
+        limit=k,
+        with_payload=True,
+    )
+
+    return [hit.payload["text"] for hit in results]
+```
+
+```python
+async def generate_review(diff: str, context: list[str]) -> ReviewOutput:
+    response = await anthropic.messages.create(
+        model="claude-3-5-sonnet-20241022",
+        max_tokens=2048,
+        system=REVIEW_SYSTEM_PROMPT,
+        messages=[
+            {
+                "role": "user",
+                "content": f"<context>\n{chr(10).join(context)}\n</context>\n\n<diff>\n{diff}\n</diff>",
+            }
+        ],
+    )
+    return parse_review(response.content[0].text)
+```
+
+## Результаты
+
+- **Время до первого review:** с 18ч в среднем до 11ч
+- **False positive rate:** около 8% по ручной валидации на 200 review
+- **Adoption:** 3 команды в проде, ещё 2 на подключении
+- **Стоимость:** примерно $0.04 на один MR review
+
+## Что бы я улучшил дальше
+
+1. **Chunking по смысловым границам, а не по количеству строк.**
+2. **Явные confidence score** для каждого замечания.
+3. **Human-in-the-loop для критичных пайплайнов**, где approve от агента не должен восприниматься как окончательное решение.

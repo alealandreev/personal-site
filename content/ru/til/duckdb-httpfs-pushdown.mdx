@@ -1,0 +1,34 @@
+Когда вы читаете Parquet-файлы из S3 через `httpfs` в DuckDB, он умеет проталкивать проекции колонок и фильтры по row group прямо в HTTP range requests. То есть скачивает только те байты, которые действительно нужны.
+
+```sql
+INSTALL httpfs;
+LOAD httpfs;
+
+SET s3_region = 'eu-west-1';
+
+-- Забирает только колонки ts и value
+-- Row groups с ts < '2026-01-01' будут пропущены целиком (если статистика валидна)
+SELECT ts, value
+FROM read_parquet('s3://my-bucket/events/*.parquet')
+WHERE ts >= '2026-01-01'
+  AND value > 100
+LIMIT 1000;
+```
+
+**Но есть нюанс:** pushdown сработает только если:
+1. В footer Parquet-файла есть **column statistics**
+2. **Размер row group адекватный** — огромные row groups заметно снижают эффективность
+3. Колонка в предикате обладает хоть какой-то селективностью
+
+Проверить статистику можно так:
+
+```python
+import pyarrow.parquet as pq
+
+pf = pq.ParquetFile("events.parquet")
+print(pf.metadata.row_group(0).column(0).statistics)
+# => <pyarrow._parquet.Statistics object>
+#    has_min_max: True, min: 2026-01-01, max: 2026-01-31
+```
+
+Если `has_min_max == False`, то ваш `WHERE` почти наверняка не спасёт от полного скана.

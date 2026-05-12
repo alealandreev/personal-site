@@ -2,47 +2,33 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { ThemeProvider } from "next-themes";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { Analytics } from "@vercel/analytics/react";
+import { normalizeLocale } from "@/lib/i18n";
 import "./globals.css";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://persistentengineer.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: {
-    default: "Aleksandr Andreev — Lead Data Engineer",
-    template: "%s · Aleksandr Andreev",
-  },
+  title: "persistentengineer.com",
   description:
-    "Lead Data Engineer with 9+ years building petabyte-scale data platforms. " +
-    "Spark, Kafka, Airflow, dbt, Apache Iceberg. Open to senior+ roles in AU/NZ/EU/US.",
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: SITE_URL,
-    siteName: "Aleksandr Andreev",
-    title: "Aleksandr Andreev — Lead Data Engineer",
-    description:
-      "Lead Data Engineer with 9+ years building petabyte-scale data platforms.",
-  },
-  twitter: {
-    card: "summary_large_image",
-    creator: "@alealandreev",
-    title: "Aleksandr Andreev — Lead Data Engineer",
-    description: "Lead Data Engineer. Spark, Kafka, Iceberg, dbt.",
-  },
+    "Lead Data Engineer focused on data platforms, distributed systems and applied AI tooling.",
   robots: { index: true, follow: true },
-  alternates: {
-    canonical: SITE_URL,
-    types: { "application/rss+xml": `${SITE_URL}/rss.xml` },
-  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale?: string }>;
+}) {
+  const { locale } = await params;
+  const htmlLang = normalizeLocale(locale);
+
   return (
     <html
-      lang="en"
+      lang={htmlLang}
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
@@ -53,9 +39,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange={false}
         >
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          {children}
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
