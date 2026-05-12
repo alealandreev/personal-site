@@ -14,7 +14,10 @@ const linksByLocale = {
     { href: "/now", label: "Сейчас" },
     { href: "/uses", label: "Инструменты" },
     { href: "/colophon", label: "Colophon" },
-    { href: "https://github.com/alealandreev/personal-site", label: "Исходники" },
+    {
+      href: "https://github.com/alealandreev/personal-site",
+      label: "Исходники",
+    },
   ],
 } as const;
 
@@ -33,13 +36,15 @@ export function Footer({ locale }: { locale: Locale }) {
         };
 
   return (
-    <footer className="mt-24 border-t border-[--border]">
+    <footer className="mt-24 border-t border-[--border] bg-[color-mix(in_srgb,var(--surface)_42%,transparent)]">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="font-mono text-xs text-[--fg-muted]">
             © {year} Aleksandr Andreev.
           </p>
-          <p className="mt-2 max-w-md text-sm text-[--fg-muted]">{copy.byline}</p>
+          <p className="mt-2 max-w-md text-sm text-[--fg-muted]">
+            {copy.byline}
+          </p>
         </div>
 
         <nav className="flex flex-wrap gap-4 text-xs font-mono text-[--fg-muted]">
@@ -48,7 +53,9 @@ export function Footer({ locale }: { locale: Locale }) {
               key={href}
               href={href.startsWith("http") ? href : localePath(locale, href)}
               className="transition-colors hover:text-[--accent]"
-              {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              {...(href.startsWith("http")
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
             >
               {label}
             </Link>

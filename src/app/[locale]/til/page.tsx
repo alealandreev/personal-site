@@ -7,6 +7,7 @@ import { getContentHref, getTils } from "@/lib/content";
 import { formatDate } from "@/lib/dates";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/metadata";
+import { formatReadingTime } from "@/lib/ui-copy";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -52,7 +53,7 @@ export default async function TilPage({ params }: Props) {
       <SectionTitle subtitle={text.subtitle}>{text.title}</SectionTitle>
       <div className="mt-6 grid gap-4">
         {tils.map((entry) => (
-          <article key={entry.slug} className="surface p-5">
+          <article key={entry.slug} className="surface-card p-5">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div>
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
@@ -74,7 +75,7 @@ export default async function TilPage({ params }: Props) {
                 </div>
               </div>
               <p className="font-mono text-xs text-[--fg-muted]">
-                {entry.readingMinutes} min
+                {formatReadingTime(locale, entry.readingMinutes)}
               </p>
             </div>
           </article>

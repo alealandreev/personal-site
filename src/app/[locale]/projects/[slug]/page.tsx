@@ -7,6 +7,7 @@ import { getEditOnGitHubUrl, getEntry } from "@/lib/content";
 import { formatDate } from "@/lib/dates";
 import { isLocale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/metadata";
+import { detailCopy, formatProjectStatus } from "@/lib/ui-copy";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -36,6 +37,7 @@ export default async function ProjectDetailPage({ params }: Props) {
   if (!entry) notFound();
 
   const Component = entry.Component;
+  const text = detailCopy[locale];
 
   return (
     <div className="page-shell page-shell-narrow">
@@ -44,7 +46,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           href={`/${locale}/projects`}
           className="transition-colors hover:text-[--accent]"
         >
-          projects
+          {text.projects}
         </Link>
         <span className="mx-2">/</span>
         <span>{slug}</span>
@@ -55,8 +57,12 @@ export default async function ProjectDetailPage({ params }: Props) {
           {formatDate(locale, entry.date, "long")}
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <h1 className="text-4xl font-semibold tracking-tight">{entry.title}</h1>
-          <span className="pill">{entry.status ?? "active"}</span>
+          <h1 className="text-4xl font-semibold tracking-tight">
+            {entry.title}
+          </h1>
+          <span className="pill">
+            {formatProjectStatus(locale, entry.status)}
+          </span>
         </div>
         <p className="mt-4 max-w-3xl text-base leading-8 text-[--fg-muted]">
           {entry.summary}
@@ -77,7 +83,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           href={`/${locale}/projects`}
           className="transition-colors hover:text-[--accent]"
         >
-          ← all projects
+          ← {text.allProjects}
         </Link>
         <a
           href={getEditOnGitHubUrl(entry)}
@@ -85,7 +91,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           rel="noopener noreferrer"
           className="transition-colors hover:text-[--accent]"
         >
-          edit on GitHub ↗
+          {text.editOnGitHub} ↗
         </a>
       </footer>
     </div>

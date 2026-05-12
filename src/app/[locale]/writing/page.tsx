@@ -7,6 +7,7 @@ import { getWriting, getContentHref } from "@/lib/content";
 import { formatDate } from "@/lib/dates";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/metadata";
+import { formatReadingTime } from "@/lib/ui-copy";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -17,13 +18,15 @@ const copy = {
     title: "Writing",
     description:
       "Long-form essays on data engineering, platform design, distributed systems and AI tooling.",
-    subtitle: "Long-form essays with explicit trade-offs and real implementation detail.",
+    subtitle:
+      "Long-form essays with explicit trade-offs and real implementation detail.",
   },
   ru: {
     title: "Статьи",
     description:
       "Большие тексты про data engineering, platform design, distributed systems и AI tooling.",
-    subtitle: "Длинные тексты с явными trade-off'ами и практическими деталями реализации.",
+    subtitle:
+      "Длинные тексты с явными trade-off'ами и практическими деталями реализации.",
   },
 } as const satisfies Record<Locale, unknown>;
 
@@ -52,7 +55,7 @@ export default async function WritingPage({ params }: Props) {
       <SectionTitle subtitle={text.subtitle}>{text.title}</SectionTitle>
       <div className="mt-6 grid gap-4">
         {posts.map((post) => (
-          <article key={post.slug} className="surface p-6">
+          <article key={post.slug} className="surface-card p-6">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               <div className="max-w-2xl">
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
@@ -74,7 +77,7 @@ export default async function WritingPage({ params }: Props) {
                 </div>
               </div>
               <p className="font-mono text-sm text-[--fg-muted]">
-                {post.readingMinutes} min
+                {formatReadingTime(locale, post.readingMinutes)}
               </p>
             </div>
           </article>

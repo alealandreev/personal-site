@@ -6,6 +6,7 @@ import { Tag } from "@/components/ui/tag";
 import { getContentHref, getProjects } from "@/lib/content";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/metadata";
+import { formatProjectStatus, formatReadingTime } from "@/lib/ui-copy";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -16,13 +17,15 @@ const copy = {
     title: "Projects",
     description:
       "Case studies on practical systems, AI tooling and production-facing platform work.",
-    subtitle: "Selected systems with context, architecture, trade-offs and outcomes.",
+    subtitle:
+      "Selected systems with context, architecture, trade-offs and outcomes.",
   },
   ru: {
     title: "Проекты",
     description:
       "Разборы практических систем, AI tooling и production-ориентированной platform work.",
-    subtitle: "Выбранные системы с контекстом, архитектурой, trade-off'ами и результатами.",
+    subtitle:
+      "Выбранные системы с контекстом, архитектурой, trade-off'ами и результатами.",
   },
 } as const satisfies Record<Locale, unknown>;
 
@@ -51,10 +54,12 @@ export default async function ProjectsPage({ params }: Props) {
       <SectionTitle subtitle={text.subtitle}>{text.title}</SectionTitle>
       <div className="mt-6 grid gap-4">
         {projects.map((project) => (
-          <article key={project.slug} className="surface p-6">
+          <article key={project.slug} className="surface-card p-6">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               <div className="max-w-3xl">
-                <p className="eyebrow">{project.status ?? "active"}</p>
+                <p className="eyebrow">
+                  {formatProjectStatus(locale, project.status)}
+                </p>
                 <Link
                   href={getContentHref(project)}
                   className="mt-3 inline-block text-2xl font-semibold tracking-tight transition-colors hover:text-[--accent]"
@@ -71,7 +76,7 @@ export default async function ProjectsPage({ params }: Props) {
                 </div>
               </div>
               <p className="font-mono text-sm text-[--fg-muted]">
-                {project.readingMinutes} min
+                {formatReadingTime(locale, project.readingMinutes)}
               </p>
             </div>
           </article>

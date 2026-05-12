@@ -30,7 +30,7 @@ const brandByLocale = {
   },
   ru: {
     title: "persistentengineer.com",
-    subtitle: "Lead Data Engineer",
+    subtitle: "Data platforms and AI tooling",
   },
 } as const;
 
@@ -40,19 +40,15 @@ export function Header({ locale }: { locale: Locale }) {
   const brand = brandByLocale[locale];
 
   return (
-    <header
-      className="sticky top-0 z-40 border-b border-[--border] backdrop-blur"
-      style={{ backgroundColor: "color-mix(in srgb, var(--bg) 92%, transparent)" }}
-    >
-      <nav className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
-        <Link
-          href={localePath(locale)}
-          className="group flex flex-col"
-        >
-          <span className="font-mono text-sm font-medium tracking-tight text-[--fg] transition-opacity group-hover:opacity-80">
+    <header className="sticky top-0 z-40 border-b border-[--border] bg-[color-mix(in_srgb,var(--bg)_88%,transparent)] backdrop-blur-xl">
+      <nav className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+        <Link href={localePath(locale)} className="group flex w-fit flex-col">
+          <span className="font-mono text-sm font-semibold tracking-tight text-[--fg] transition-colors group-hover:text-[--accent]">
             {brand.title}
           </span>
-          <span className="mt-1 text-xs text-[--fg-muted]">{brand.subtitle}</span>
+          <span className="mt-1 text-xs text-[--fg-muted]">
+            {brand.subtitle}
+          </span>
         </Link>
 
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
@@ -67,8 +63,10 @@ export function Header({ locale }: { locale: Locale }) {
                 <Link
                   key={href}
                   href={localizedHref}
-                  className={`font-mono text-sm transition-colors ${
-                    active ? "text-[--accent]" : "text-[--fg-muted] hover:text-[--accent]"
+                  className={`rounded-full px-3 py-1.5 font-mono text-sm transition-colors ${
+                    active
+                      ? "bg-[--accent-soft] text-[--accent]"
+                      : "text-[--fg-muted] hover:bg-[--surface-strong] hover:text-[--accent]"
                   }`}
                 >
                   {label}

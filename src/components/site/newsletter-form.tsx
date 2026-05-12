@@ -24,7 +24,7 @@ const copy = {
     title: "Новые статьи на почту",
     description:
       "Редкие письма про data engineering, архитектуру и полезные инженерные эксперименты.",
-    placeholder: "you@example.com",
+    placeholder: "your@email.com",
     button: "Подписаться",
     loading: "Отправляем...",
     success: "Готово. Проверьте почту и подтвердите подписку.",
@@ -39,9 +39,9 @@ export function NewsletterForm({
 }: NewsletterFormProps) {
   const text = copy[locale];
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
-    "idle"
-  );
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [message, setMessage] = useState("");
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {

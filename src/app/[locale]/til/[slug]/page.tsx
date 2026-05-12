@@ -7,6 +7,7 @@ import { getEditOnGitHubUrl, getEntry } from "@/lib/content";
 import { formatDate } from "@/lib/dates";
 import { isLocale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/metadata";
+import { detailCopy } from "@/lib/ui-copy";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -36,12 +37,16 @@ export default async function TilDetailPage({ params }: Props) {
   if (!entry) notFound();
 
   const Component = entry.Component;
+  const text = detailCopy[locale];
 
   return (
     <div className="page-shell page-shell-narrow">
       <nav className="font-mono text-xs text-[--fg-muted]">
-        <Link href={`/${locale}/til`} className="transition-colors hover:text-[--accent]">
-          til
+        <Link
+          href={`/${locale}/til`}
+          className="transition-colors hover:text-[--accent]"
+        >
+          {text.til}
         </Link>
         <span className="mx-2">/</span>
         <span>{slug}</span>
@@ -51,7 +56,9 @@ export default async function TilDetailPage({ params }: Props) {
         <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
           {formatDate(locale, entry.date, "long")}
         </p>
-        <h1 className="mt-4 text-3xl font-semibold tracking-tight">{entry.title}</h1>
+        <h1 className="mt-4 text-3xl font-semibold tracking-tight">
+          {entry.title}
+        </h1>
         <p className="mt-4 max-w-3xl text-base leading-8 text-[--fg-muted]">
           {entry.summary}
         </p>
@@ -67,8 +74,11 @@ export default async function TilDetailPage({ params }: Props) {
       </article>
 
       <footer className="mt-8 flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-[--fg-muted]">
-        <Link href={`/${locale}/til`} className="transition-colors hover:text-[--accent]">
-          ← all notes
+        <Link
+          href={`/${locale}/til`}
+          className="transition-colors hover:text-[--accent]"
+        >
+          ← {text.allNotes}
         </Link>
         <a
           href={getEditOnGitHubUrl(entry)}
@@ -76,7 +86,7 @@ export default async function TilDetailPage({ params }: Props) {
           rel="noopener noreferrer"
           className="transition-colors hover:text-[--accent]"
         >
-          edit on GitHub ↗
+          {text.editOnGitHub} ↗
         </a>
       </footer>
     </div>

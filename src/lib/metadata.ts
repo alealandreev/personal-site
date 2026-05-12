@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { defaultLocale, localePath, locales, type Locale } from "@/lib/i18n";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://persistentengineer.com";
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://persistentengineer.com";
 const SITE_NAME = "persistentengineer.com";
 
 const localeMeta: Record<
@@ -28,6 +29,7 @@ type MetadataOptions = {
   description?: string;
   path?: string;
   type?: "website" | "article";
+  robots?: Metadata["robots"];
 };
 
 export function getSiteUrl(path = "") {
@@ -40,6 +42,7 @@ export function buildMetadata({
   description,
   path = "",
   type = "website",
+  robots,
 }: MetadataOptions): Metadata {
   const base = localeMeta[locale];
   const resolvedTitle = title ?? base.siteTitle;
@@ -63,7 +66,9 @@ export function buildMetadata({
       types:
         locale === defaultLocale
           ? { "application/rss+xml": getSiteUrl("/rss.xml") }
-          : { "application/rss+xml": getSiteUrl(localePath(locale, "/rss.xml")) },
+          : {
+              "application/rss+xml": getSiteUrl(localePath(locale, "/rss.xml")),
+            },
     },
     openGraph: {
       type,
@@ -81,5 +86,6 @@ export function buildMetadata({
       description: resolvedDescription,
       images: [getSiteUrl(localePath(locale, "/opengraph-image"))],
     },
+    ...(robots ? { robots } : {}),
   };
 }

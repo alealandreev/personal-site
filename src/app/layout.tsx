@@ -3,10 +3,12 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/react";
+import { headers } from "next/headers";
 import { normalizeLocale } from "@/lib/i18n";
 import "./globals.css";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://persistentengineer.com";
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://persistentengineer.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -18,12 +20,11 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale?: string }>;
 }) {
-  const { locale } = await params;
+  const requestHeaders = await headers();
+  const locale = requestHeaders.get("x-site-locale") ?? undefined;
   const htmlLang = normalizeLocale(locale);
 
   return (

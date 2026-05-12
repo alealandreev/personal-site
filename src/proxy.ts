@@ -4,6 +4,17 @@ import { defaultLocale, isLocale } from "@/lib/i18n";
 
 const PUBLIC_FILE = /\.[^/]+$/;
 
+function nextWithLocale(request: NextRequest, locale: string) {
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-site-locale", locale);
+
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
+}
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -21,7 +32,7 @@ export function proxy(request: NextRequest) {
 
   const segments = pathname.split("/").filter(Boolean);
   if (segments[0] && isLocale(segments[0])) {
-    return NextResponse.next();
+    return nextWithLocale(request, segments[0]);
   }
 
   const url = request.nextUrl.clone();
