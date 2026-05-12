@@ -13,8 +13,8 @@ type Props = {
 const copy = {
   en: {
     title: "Dashboard",
-    description: "A small public snapshot based on site and content data.",
-    note: "This page intentionally stays minimal until I connect reliable external activity sources.",
+    description: "A public snapshot of the site as a small data product.",
+    note: "For now this dashboard is powered by local content metadata. The next step is a scheduled ETL that adds GitHub, writing and activity signals as queryable public data.",
     statsLabels: {
       posts: "Posts",
       til: "TIL",
@@ -26,9 +26,8 @@ const copy = {
   },
   ru: {
     title: "Dashboard",
-    description:
-      "Небольшой публичный снимок по данным самого сайта и контента.",
-    note: "Страница специально остаётся минимальной, пока не подключены надёжные внешние источники активности.",
+    description: "Публичный снимок сайта как небольшого data product.",
+    note: "Сейчас dashboard питается локальными metadata контента. Следующий шаг — scheduled ETL, который добавит GitHub, writing и activity-сигналы как публичные queryable data.",
     statsLabels: {
       posts: "Статьи",
       til: "TIL",
@@ -50,7 +49,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: text.title,
     description: text.description,
     path: "/dashboard",
-    robots: { index: false, follow: true },
   });
 }
 
@@ -74,18 +72,18 @@ export default async function DashboardPage({ params }: Props) {
             value: stats.totalWords.toLocaleString(locale),
           },
         ].map((item) => (
-          <div key={item.label} className="surface p-5">
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
+          <div key={item.label} className="surface-card p-5">
+            <p className="meta-line">
               {item.label}
             </p>
-            <p className="mt-3 text-3xl font-semibold tracking-tight">
+            <p className="mt-3 text-3xl font-semibold tracking-[-0.055em]">
               {item.value}
             </p>
           </div>
         ))}
       </div>
 
-      <div className="surface mt-6 p-6">
+      <div className="surface-card mt-6 p-6 sm:p-7">
         <p className="text-sm leading-7 text-[--fg-muted]">{text.note}</p>
         <div className="mt-4 flex flex-wrap gap-3">
           <Link

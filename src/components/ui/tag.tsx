@@ -9,7 +9,7 @@ interface TagProps {
 
 export function Tag({ tag, href = true, locale = "en" }: TagProps) {
   const content = (
-    <span className="pill text-[11px] hover:border-[--accent] hover:text-[--accent]">
+    <span className="pill text-[11px] hover:border-[--accent] hover:bg-[--accent-soft] hover:text-[--accent]">
       {tag}
     </span>
   );

@@ -16,7 +16,7 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
   const targetPath = localePath(alternateLocale, stripLocalePrefix(pathname));
 
   return (
-    <div className="flex items-center gap-1 rounded-full border border-[--border] bg-[--surface] p-1">
+    <div className="flex items-center gap-1 rounded-full border border-[--border] bg-[--surface] p-1 shadow-[var(--shadow-card)]">
       <span className="rounded-full bg-[--surface-strong] px-2 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-[--fg]">
         {localeLabels[locale]}
       </span>

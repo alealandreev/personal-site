@@ -54,7 +54,7 @@ export default async function ProjectsPage({ params }: Props) {
       <SectionTitle subtitle={text.subtitle}>{text.title}</SectionTitle>
       <div className="mt-6 grid gap-4">
         {projects.map((project) => (
-          <article key={project.slug} className="surface-card p-6">
+          <article key={project.slug} className="surface-card p-6 sm:p-7">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               <div className="max-w-3xl">
                 <p className="eyebrow">
@@ -75,7 +75,7 @@ export default async function ProjectsPage({ params }: Props) {
                   ))}
                 </div>
               </div>
-              <p className="font-mono text-sm text-[--fg-muted]">
+              <p className="w-fit rounded-full border border-[--border] bg-[--surface] px-3 py-1.5 font-mono text-xs text-[--fg-muted]">
                 {formatReadingTime(locale, project.readingMinutes)}
               </p>
             </div>

@@ -52,12 +52,12 @@ export default async function ProjectDetailPage({ params }: Props) {
         <span>{slug}</span>
       </nav>
 
-      <header className="mt-8 surface p-7 sm:p-10">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
+      <header className="detail-hero mt-8 p-7 sm:p-10">
+        <p className="meta-line">
           {formatDate(locale, entry.date, "long")}
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <h1 className="text-4xl font-semibold tracking-tight">
+          <h1 className="text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">
             {entry.title}
           </h1>
           <span className="pill">
@@ -74,14 +74,14 @@ export default async function ProjectDetailPage({ params }: Props) {
         </div>
       </header>
 
-      <article className="prose prose-custom mt-10 max-w-none rounded-[28px] border border-[--border] bg-[--surface] p-6 shadow-[var(--shadow-card)] sm:p-10">
+      <article className="prose prose-custom detail-article mt-10 max-w-none p-6 sm:p-10">
         <Component components={getMDXComponents()} />
       </article>
 
-      <footer className="mt-8 flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-[--fg-muted]">
+      <footer className="detail-footer mt-8 flex flex-wrap items-center justify-between gap-4">
         <Link
           href={`/${locale}/projects`}
-          className="transition-colors hover:text-[--accent]"
+          className="arrow-link"
         >
           ← {text.allProjects}
         </Link>
@@ -89,7 +89,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           href={getEditOnGitHubUrl(entry)}
           target="_blank"
           rel="noopener noreferrer"
-          className="transition-colors hover:text-[--accent]"
+          className="arrow-link"
         >
           {text.editOnGitHub} ↗
         </a>

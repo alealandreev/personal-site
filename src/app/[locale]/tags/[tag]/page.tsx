@@ -40,27 +40,37 @@ export default async function TagPage({ params }: Props) {
   return (
     <div className="page-shell page-shell-narrow">
       <nav className="font-mono text-xs text-[--fg-muted]">
-        <Link href={`/${locale}/tags`} className="transition-colors hover:text-[--accent]">
+        <Link
+          href={`/${locale}/tags`}
+          className="transition-colors hover:text-[--accent]"
+        >
           tags
         </Link>
         <span className="mx-2">/</span>
         <span>{tag}</span>
       </nav>
 
-      <header className="mt-8 surface p-7 sm:p-10">
+      <header className="detail-hero mt-8 p-7 sm:p-10">
         <p className="eyebrow">topic</p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight">#{tag}</h1>
+        <h1 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">
+          #{tag}
+        </h1>
         {description ? (
-          <p className="mt-4 text-base leading-8 text-[--fg-muted]">{description}</p>
+          <p className="mt-4 text-base leading-8 text-[--fg-muted]">
+            {description}
+          </p>
         ) : null}
       </header>
 
       <div className="mt-8 grid gap-4">
         {entries.map((entry) => (
-          <article key={`${entry.kind}-${entry.slug}`} className="surface p-6">
+          <article
+            key={`${entry.kind}-${entry.slug}`}
+            className="surface-card p-6"
+          >
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               <div className="max-w-3xl">
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
+                <p className="meta-line">
                   {entry.kind} · {formatDate(locale, entry.date)}
                 </p>
                 <Link

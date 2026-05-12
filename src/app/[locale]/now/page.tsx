@@ -92,12 +92,18 @@ export default async function NowPage({ params }: Props) {
     <PageShell>
       <SectionTitle subtitle={text.description}>{text.title}</SectionTitle>
       <div className="mt-6 grid gap-4 md:grid-cols-3">
-        {text.sections.map((section) => (
-          <section key={section.heading} className="surface p-6">
-            <h2 className="text-xl font-semibold tracking-tight">{section.heading}</h2>
+        {text.sections.map((section, index) => (
+          <section key={section.heading} className="surface-card p-6">
+            <p className="font-mono text-xs text-[--accent]">0{index + 1}</p>
+            <h2 className="mt-3 text-xl font-semibold tracking-tight">
+              {section.heading}
+            </h2>
             <ul className="mt-4 space-y-3">
               {section.items.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-7 text-[--fg-muted]">
+                <li
+                  key={item}
+                  className="flex gap-3 text-sm leading-7 text-[--fg-muted]"
+                >
                   <span className="mt-2 h-2 w-2 rounded-full bg-[--accent]" />
                   <span>{item}</span>
                 </li>

@@ -53,10 +53,10 @@ export default async function TilPage({ params }: Props) {
       <SectionTitle subtitle={text.subtitle}>{text.title}</SectionTitle>
       <div className="mt-6 grid gap-4">
         {tils.map((entry) => (
-          <article key={entry.slug} className="surface-card p-5">
+          <article key={entry.slug} className="surface-card p-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
+                <p className="meta-line">
                   {formatDate(locale, entry.date)}
                 </p>
                 <Link
@@ -74,7 +74,7 @@ export default async function TilPage({ params }: Props) {
                   ))}
                 </div>
               </div>
-              <p className="font-mono text-xs text-[--fg-muted]">
+              <p className="w-fit rounded-full border border-[--border] bg-[--surface] px-3 py-1.5 font-mono text-xs text-[--fg-muted]">
                 {formatReadingTime(locale, entry.readingMinutes)}
               </p>
             </div>

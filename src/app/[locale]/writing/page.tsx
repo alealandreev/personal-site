@@ -55,10 +55,10 @@ export default async function WritingPage({ params }: Props) {
       <SectionTitle subtitle={text.subtitle}>{text.title}</SectionTitle>
       <div className="mt-6 grid gap-4">
         {posts.map((post) => (
-          <article key={post.slug} className="surface-card p-6">
+          <article key={post.slug} className="surface-card p-6 sm:p-7">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               <div className="max-w-2xl">
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
+                <p className="meta-line">
                   {formatDate(locale, post.date)}
                 </p>
                 <Link
@@ -76,7 +76,7 @@ export default async function WritingPage({ params }: Props) {
                   ))}
                 </div>
               </div>
-              <p className="font-mono text-sm text-[--fg-muted]">
+              <p className="w-fit rounded-full border border-[--border] bg-[--surface] px-3 py-1.5 font-mono text-xs text-[--fg-muted]">
                 {formatReadingTime(locale, post.readingMinutes)}
               </p>
             </div>

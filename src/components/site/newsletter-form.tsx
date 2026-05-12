@@ -78,17 +78,17 @@ export function NewsletterForm({
   }
 
   return (
-    <section className={`surface ${compact ? "p-5" : "p-6 sm:p-8"}`}>
-      <div className={compact ? "" : "max-w-xl"}>
+    <section className={`surface-card ${compact ? "p-5" : "p-6 sm:p-8"}`}>
+      <div className={compact ? "" : "max-w-2xl"}>
         <p className="eyebrow">{text.title}</p>
-        <p className="mt-3 text-sm text-[--fg-muted] sm:text-base">
+        <p className="mt-3 text-sm leading-7 text-[--fg-muted] sm:text-base">
           {text.description}
         </p>
       </div>
 
       <form
         onSubmit={onSubmit}
-        className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center"
+        className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center"
       >
         <label className="sr-only" htmlFor="newsletter-email">
           Email

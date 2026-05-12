@@ -26,7 +26,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
         <img
           src={src}
           alt={alt || ""}
-          className="w-full rounded-3xl border border-[--border]"
+          className="w-full rounded-[28px] border border-[--border] shadow-[var(--shadow-card)]"
           {...props}
         />
         {alt && (
@@ -39,7 +39,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 
     // Callout / blockquote
     blockquote: ({ children }) => (
-      <blockquote className="my-6 border-l-[3px] border-[--accent] pl-4 italic text-[--fg-muted]">
+      <blockquote className="my-8 rounded-3xl border border-[--border] bg-[--surface-strong] px-5 py-4 text-[--fg-muted]">
         {children}
       </blockquote>
     ),

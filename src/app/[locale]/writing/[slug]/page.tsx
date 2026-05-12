@@ -52,11 +52,11 @@ export default async function WritingDetailPage({ params }: Props) {
         <span>{slug}</span>
       </nav>
 
-      <header className="mt-8 surface p-7 sm:p-10">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
+      <header className="detail-hero mt-8 p-7 sm:p-10">
+        <p className="meta-line">
           {formatDate(locale, entry.date, "long")}
         </p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight">
+        <h1 className="mt-4 text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">
           {entry.title}
         </h1>
         <p className="mt-4 max-w-3xl text-base leading-8 text-[--fg-muted]">
@@ -69,14 +69,14 @@ export default async function WritingDetailPage({ params }: Props) {
         </div>
       </header>
 
-      <article className="prose prose-custom mt-10 max-w-none rounded-[28px] border border-[--border] bg-[--surface] p-6 shadow-[var(--shadow-card)] sm:p-10">
+      <article className="prose prose-custom detail-article mt-10 max-w-none p-6 sm:p-10">
         <Component components={getMDXComponents()} />
       </article>
 
-      <footer className="mt-8 flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-[--fg-muted]">
+      <footer className="detail-footer mt-8 flex flex-wrap items-center justify-between gap-4">
         <Link
           href={`/${locale}/writing`}
-          className="transition-colors hover:text-[--accent]"
+          className="arrow-link"
         >
           ← {text.allPosts}
         </Link>
@@ -84,7 +84,7 @@ export default async function WritingDetailPage({ params }: Props) {
           href={getEditOnGitHubUrl(entry)}
           target="_blank"
           rel="noopener noreferrer"
-          className="transition-colors hover:text-[--accent]"
+          className="arrow-link"
         >
           {text.editOnGitHub} ↗
         </a>

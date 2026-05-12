@@ -2,7 +2,8 @@ import type { MetadataRoute } from "next";
 import { getAllTags, getEntries } from "@/lib/content";
 import { localePath, locales } from "@/lib/i18n";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://persistentengineer.com";
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://persistentengineer.com";
 
 const staticPaths = [
   "",
@@ -11,6 +12,7 @@ const staticPaths = [
   "/til",
   "/projects",
   "/tags",
+  "/dashboard",
   "/now",
   "/uses",
   "/cv",
@@ -22,7 +24,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     staticPaths.map((path) => ({
       url: `${SITE_URL}${localePath(locale, path || "/")}`,
       priority: path === "" ? 1.0 : 0.7,
-      changeFrequency: path === "/writing" || path === "/til" ? "weekly" : "monthly",
+      changeFrequency:
+        path === "/writing" || path === "/til" ? "weekly" : "monthly",
       alternates: {
         languages: Object.fromEntries(
           locales.map((candidate) => [

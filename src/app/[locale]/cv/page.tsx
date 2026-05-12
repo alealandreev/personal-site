@@ -167,11 +167,11 @@ export default async function CVPage({ params }: Props) {
 
   return (
     <PageShell>
-      <section className="surface p-7 sm:p-10">
+      <section className="detail-hero p-7 sm:p-10">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between print:hidden">
           <div>
             <p className="eyebrow">{text.title}</p>
-            <h1 className="mt-4 text-4xl font-semibold tracking-tight">
+            <h1 className="mt-4 text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">
               Aleksandr Andreev
             </h1>
             <p className="mt-3 max-w-3xl text-base leading-8 text-[--fg-muted]">
@@ -196,7 +196,10 @@ export default async function CVPage({ params }: Props) {
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {text.highlights.map((item) => (
-            <div key={item} className="rounded-2xl border border-[--border] p-4">
+            <div
+              key={item}
+              className="rounded-3xl border border-[--border] bg-[color-mix(in_srgb,var(--surface)_72%,transparent)] p-4"
+            >
               <p className="text-sm leading-7 text-[--fg-muted]">{item}</p>
             </div>
           ))}
@@ -207,13 +210,16 @@ export default async function CVPage({ params }: Props) {
         <SectionTitle>{text.experienceTitle}</SectionTitle>
         <div className="mt-6 space-y-4">
           {jobs[locale].map((job) => (
-            <article key={`${job.company}-${job.period}`} className="surface p-6">
+            <article
+              key={`${job.company}-${job.period}`}
+              className="surface-card p-6"
+            >
               <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <h2 className="text-xl font-semibold tracking-tight">{job.role}</h2>
                   <p className="mt-1 text-sm text-[--fg-muted]">{job.company}</p>
                 </div>
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
+                <p className="meta-line">
                   {job.period}
                 </p>
               </div>
@@ -231,7 +237,7 @@ export default async function CVPage({ params }: Props) {
       </section>
 
       <section className="mt-14 grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)]">
-        <div className="surface p-6">
+        <div className="surface-card p-6">
           <SectionTitle>{text.skillsTitle}</SectionTitle>
           <div className="mt-5 space-y-4">
             {skills[locale].map((item) => (
@@ -239,7 +245,7 @@ export default async function CVPage({ params }: Props) {
                 key={item.label}
                 className="grid gap-2 border-b border-[--border] pb-4 last:border-b-0 last:pb-0 sm:grid-cols-[140px_minmax(0,1fr)]"
               >
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
+                <p className="meta-line">
                   {item.label}
                 </p>
                 <p className="text-sm leading-7 text-[--fg]">{item.value}</p>
@@ -248,7 +254,7 @@ export default async function CVPage({ params }: Props) {
           </div>
         </div>
 
-        <aside className="surface p-6">
+        <aside className="surface-card p-6">
           <SectionTitle>{text.detailsTitle}</SectionTitle>
           <ul className="mt-5 space-y-3">
             {text.details.map((item) => (

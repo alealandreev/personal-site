@@ -68,14 +68,14 @@ export default async function ColophonPage({ params }: Props) {
     <PageShell>
       <SectionTitle subtitle={text.description}>{text.title}</SectionTitle>
       <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)]">
-        <div className="surface p-6">
+        <div className="surface-card p-6">
           <div className="space-y-4">
             {text.stack.map((item) => (
               <div
                 key={item.label}
                 className="grid gap-2 border-b border-[--border] pb-4 last:border-b-0 last:pb-0 sm:grid-cols-[140px_minmax(0,1fr)]"
               >
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
+                <p className="meta-line">
                   {item.label}
                 </p>
                 <p className="text-sm leading-7 text-[--fg]">{item.value}</p>
@@ -84,7 +84,7 @@ export default async function ColophonPage({ params }: Props) {
           </div>
         </div>
 
-        <aside className="surface p-6">
+        <aside className="surface-card p-6">
           <h2 className="text-xl font-semibold tracking-tight">Notes</h2>
           <ul className="mt-4 space-y-3">
             {text.notes.map((item) => (

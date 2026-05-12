@@ -51,10 +51,10 @@ export default async function TagsPage({ params }: Props) {
           <Link
             key={item.tag}
             href={localePath(locale, `/tags/${item.tag}`)}
-            className="surface flex flex-col gap-3 p-5 transition-colors hover:border-[--accent]"
+            className="surface-card flex flex-col gap-3 p-5"
           >
             <div className="flex items-center justify-between gap-4">
-              <h2 className="font-mono text-sm text-[--fg]">#{item.tag}</h2>
+              <h2 className="font-mono text-sm text-[--accent]">#{item.tag}</h2>
               <span className="pill">{item.count}</span>
             </div>
             <p className="text-sm leading-7 text-[--fg-muted]">

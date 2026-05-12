@@ -92,9 +92,12 @@ export default async function UsesPage({ params }: Props) {
     <PageShell>
       <SectionTitle subtitle={text.description}>{text.title}</SectionTitle>
       <div className="mt-6 grid gap-4 md:grid-cols-3">
-        {text.groups.map((group) => (
-          <section key={group.heading} className="surface p-6">
-            <h2 className="text-xl font-semibold tracking-tight">{group.heading}</h2>
+        {text.groups.map((group, index) => (
+          <section key={group.heading} className="surface-card p-6">
+            <p className="font-mono text-xs text-[--accent]">0{index + 1}</p>
+            <h2 className="mt-3 text-xl font-semibold tracking-tight">
+              {group.heading}
+            </h2>
             <ul className="mt-4 space-y-3">
               {group.items.map((item) => (
                 <li key={item} className="text-sm leading-7 text-[--fg-muted]">

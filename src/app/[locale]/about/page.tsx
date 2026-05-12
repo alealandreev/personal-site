@@ -115,9 +115,9 @@ export default async function AboutPage({ params }: Props) {
 
   return (
     <PageShell>
-      <section className="surface p-7 sm:p-10">
+      <section className="detail-hero p-7 sm:p-10">
         <p className="eyebrow">{text.title}</p>
-        <h1 className="mt-5 text-4xl font-semibold tracking-tight">
+        <h1 className="mt-5 text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">
           Aleksandr Andreev
         </h1>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-[--fg-muted]">
@@ -130,7 +130,7 @@ export default async function AboutPage({ params }: Props) {
             ))}
           </div>
 
-          <aside className="rounded-3xl border border-[--border] bg-[--surface-strong] p-5">
+          <aside className="rounded-3xl border border-[--border] bg-[color-mix(in_srgb,var(--surface-strong)_78%,transparent)] p-5">
             <p className="eyebrow">{text.availabilityTitle}</p>
             <p className="mt-4 text-sm leading-7 text-[--fg-muted]">
               {text.availability}
@@ -145,7 +145,7 @@ export default async function AboutPage({ params }: Props) {
       </section>
 
       <section className="mt-14 grid gap-8 lg:grid-cols-2">
-        <div className="surface p-6">
+        <div className="surface-card p-6">
           <SectionTitle>{text.principlesTitle}</SectionTitle>
           <ul className="mt-5 space-y-3">
             {text.principles.map((principle) => (
@@ -157,7 +157,7 @@ export default async function AboutPage({ params }: Props) {
           </ul>
         </div>
 
-        <div className="surface p-6">
+        <div className="surface-card p-6">
           <SectionTitle>{text.stackTitle}</SectionTitle>
           <div className="mt-5 flex flex-wrap gap-2">
             {text.stack.map((item) => (
@@ -176,7 +176,7 @@ export default async function AboutPage({ params }: Props) {
               href={item.href}
               target={item.href.startsWith("http") ? "_blank" : undefined}
               rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="surface flex items-center justify-between p-5 transition-colors hover:border-[--accent]"
+              className="surface-card flex items-center justify-between p-5"
             >
               <span className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
                 {item.label}

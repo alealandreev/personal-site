@@ -4,6 +4,7 @@ import { localePath, type Locale } from "@/lib/i18n";
 const linksByLocale = {
   en: [
     { href: "/rss.xml", label: "RSS" },
+    { href: "/dashboard", label: "Dashboard" },
     { href: "/now", label: "Now" },
     { href: "/uses", label: "Uses" },
     { href: "/colophon", label: "Colophon" },
@@ -11,6 +12,7 @@ const linksByLocale = {
   ],
   ru: [
     { href: "/rss.xml", label: "RSS" },
+    { href: "/dashboard", label: "Dashboard" },
     { href: "/now", label: "Сейчас" },
     { href: "/uses", label: "Инструменты" },
     { href: "/colophon", label: "Colophon" },
@@ -36,23 +38,23 @@ export function Footer({ locale }: { locale: Locale }) {
         };
 
   return (
-    <footer className="mt-24 border-t border-[--border] bg-[color-mix(in_srgb,var(--surface)_42%,transparent)]">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 md:flex-row md:items-end md:justify-between">
+    <footer className="mt-24 border-t border-[--border] bg-[color-mix(in_srgb,var(--surface)_54%,transparent)]">
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-12 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="font-mono text-xs text-[--fg-muted]">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-[--fg-muted]">
             © {year} Aleksandr Andreev.
           </p>
-          <p className="mt-2 max-w-md text-sm text-[--fg-muted]">
+          <p className="mt-3 max-w-md text-sm leading-7 text-[--fg-muted]">
             {copy.byline}
           </p>
         </div>
 
-        <nav className="flex flex-wrap gap-4 text-xs font-mono text-[--fg-muted]">
+        <nav className="flex flex-wrap gap-2 text-xs font-mono text-[--fg-muted]">
           {links.map(({ href, label }) => (
             <Link
               key={href}
               href={href.startsWith("http") ? href : localePath(locale, href)}
-              className="transition-colors hover:text-[--accent]"
+              className="rounded-full border border-[--border] bg-[--surface] px-3 py-1.5 transition-colors hover:border-[--accent] hover:text-[--accent]"
               {...(href.startsWith("http")
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
